@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Chat</title>
+    <style>
+        body { font-family: Arial; margin: 0; background: #0088cc; }
+        .app { max-width: 1000px; margin: 20px auto; background: white; border-radius: 10px; overflow: hidden; }
+        .header { background: #0088cc; color: white; padding: 15px; text-align: center; }
+        .chats { display: flex; height: 500px; }
+        .sidebar { width: 300px; border-right: 1px solid #ddd; background: #f8f9fa; }
+        .chat-area { flex: 1; display: flex; flex-direction: column; }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; background: #f0f2f5; }
+        .input { padding: 15px; border-top: 1px solid #ddd; display: flex; }
+        input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; }
+        button { background: #0088cc; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-left: 10px; cursor: pointer; }
+        .chat-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .chat-item:hover { background: #e3f2fd; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 10px; max-width: 70%; }
+        .my { background: #0088cc; color: white; margin-left: auto; }
+        .other { background: white; margin-right: auto; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <h2>💬 Telegram Chat</h2>
+            <p>Работает через Firebase</p>
+        </div>
+        <div class="chats">
+            <div class="sidebar" id="sidebar">
+                <div class="chat-item" onclick="openChat('user1')">👤 Алексей</div>
+                <div class="chat-item" onclick="openChat('user2')">👤 Мария</div>
+                <div class="chat-item" onclick="openChat('user3')">👤 Иван</div>
+            </div>
+            <div class="chat-area">
+                <div class="messages" id="messages">
+                    <div style="text-align: center; padding: 50px; color: #666;">
+                        <h3>Выберите чат слева</h3>
+                        <p>Сообщения сохраняются и видны всем</p>
+                    </div>
+                </div>
+                <div class="input">
+                    <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                    <button onclick="sendMessage()">Отправить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Простой чат без Firebase (для начала)
+        let currentUser = 'Вы';
+        
+        function openChat(userName) {
+            document.getElementById('messages').innerHTML = `
+                <div class="message other">
+                    <strong>${userName}</strong><br>
+                    Привет! Как дела?
+                </div>
+                <div class="message my">
+                    <strong>Вы</strong><br>
+                    Привет! Хорошо
+                </div>
+            `;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value;
+            
+            if (!text) return;
+            
+            const messages = document.getElementById('messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message my';
+            msgDiv.innerHTML = `<strong>Вы</strong><br>${text}`;
+            messages.appendChild(msgDiv);
+            
+            input.value = '';
+            
+            // Имитация ответа
+            setTimeout(() => {
+                const replies = ['Хорошо!', 'Понял', 'Спасибо', 'Отлично!'];
+                const reply = replies[Math.floor(Math.random() * replies.length)];
+                const replyDiv = document.createElement('div');
+                replyDiv.className = 'message other';
+                replyDiv.innerHTML = `<strong>Собеседник</strong><br>${reply}`;
+                messages.appendChild(replyDiv);
+            }, 1000);
+        }
+        
+        // Отправка по Enter
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
